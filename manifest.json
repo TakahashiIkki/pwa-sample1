@@ -5,7 +5,7 @@
     "theme_color": "#FF6D00",
     "icons": [
         {
-            "src": "./icon256.png",
+            "src": "icon256.png",
             "sizes": "256×256",
             "type": "image/png"
         }, {
@@ -13,7 +13,7 @@
             "sizes": "192x192",
             "type": "image/png"
         }, {
-            "src": "./splash512.png",
+            "src": "splash512.png",
             "sizes": "512×512",
             "type": "image/png"
         }
