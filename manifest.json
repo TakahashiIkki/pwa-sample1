@@ -1,0 +1,16 @@
+{
+    "name": "もくもく会 PWA Sample",
+    "shotr_name": "Parrt.25 PWA",
+    "background_color": "#FF6D00",
+    "icons": [{
+        "src": "./icon256.png",
+        "sizes": "256×256",
+        "type": "image/png"
+    }, {
+        "src": "./icon192.png",
+        "sizes": "192×192",
+        "type": "image/png"
+    }],
+    "start_url": "./?from=home",
+    "display": "standalone"
+}
