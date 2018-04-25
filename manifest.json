@@ -3,19 +3,21 @@
     "short_name": "Part.25 PWA",
     "background_color": "#FFFFFF",
     "theme_color": "#FF6D00",
-    "icons": [{
-        "src": "./icon256.png",
-        "sizes": "256×256",
-        "type": "image/png"
-    }, {
-        "src": "./icon192.png",
-        "sizes": "192×192",
-        "type": "image/png"
-    },{
-        "src": "./splash512.png",
-        "sizes": "512×512",
-        "type": "image/png"
-    }],
+    "icons": [
+        {
+            "src": "./icon256.png",
+            "sizes": "256×256",
+            "type": "image/png"
+        }, {
+            "src":"icon192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }, {
+            "src": "./splash512.png",
+            "sizes": "512×512",
+            "type": "image/png"
+        }
+    ],
     "start_url": "./?from=home",
     "display": "standalone"
 }
