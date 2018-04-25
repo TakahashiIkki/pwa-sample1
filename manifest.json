@@ -8,10 +8,6 @@
             "src":"icon192.png",
             "type": "image/png",
             "sizes": "192x192"
-        }, {
-            "src": "splash512.png",
-            "type": "image/png",
-            "sizes": "512×512"
         }
     ],
     "start_url": "./?from=home",
