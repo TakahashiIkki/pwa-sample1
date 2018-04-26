@@ -4,6 +4,7 @@ var urlsToCache = [
     '/index.html',
     '/?from=hom',
     '/icon.png',
+    '/icon512.png',
     '/service-worker.js'
 ];
 
@@ -65,7 +66,8 @@ self.addEventListener('fetch', function(event) {
                 function(response) {
                   // レスポンスが正しいかをチェック
                   if(!response || response.status !== 200 || response.type !== 'basic') {
-                    return response;
+                      console.log('NG Response');
+                      return response;
                   }
       
                   // 重要：レスポンスを clone する。レスポンスは Stream で
