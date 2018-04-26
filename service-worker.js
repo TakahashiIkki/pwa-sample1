@@ -1,5 +1,5 @@
 var CACHE_NAME = 'my-okamoba-cache-v2';
-var urlsToCache = [
+var CACHE_URLS = [
     '/',
     '/index.html',
     '/?from=hom',
@@ -18,7 +18,7 @@ self.addEventListener('install', function(event) {
         caches.open(CACHE_NAME)
             .then(function(cache) {
                 console.log('Opened cache');
-                return cache.addAll(urlsToCache);
+                return cache.addAll(CACHE_URLS).then(() => self.skipWaiting());
             })
     );
 });
@@ -42,6 +42,8 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
+    console.log('[ServiceWorker] Fetch');
+
     // Service Worker がインストールされた状態で、
     // 他のページヘ移動したりページを更新したりすると、Service Worker は fetch イベントを受け取ります。
 
@@ -49,9 +51,11 @@ self.addEventListener('fetch', function(event) {
         caches.match(event.request)
           .then(function(response) {
             if (response) {
+                console.log('[ServiceWorker] Already Exist Response');
                 // キャッシュがあったのでそのレスポンスを返す
                 return response;
             }
+
             // // ↓ 下のように記述する事で、キャッシュが無ければネットワークリクエストを投げるようになる。
             // return fetch(event.request);
 
@@ -62,29 +66,31 @@ self.addEventListener('fetch', function(event) {
             // 必要なので、リクエストは clone しないといけない
             var fetchRequest = event.request.clone();
 
-            return fetch(fetchRequest).then(
-                function(response) {
-                  // レスポンスが正しいかをチェック
-                  if(!response || response.status !== 200 || response.type !== 'basic') {
-                      console.log('NG Response');
-                      return response;
-                  }
-      
-                  // 重要：レスポンスを clone する。レスポンスは Stream で
-                  // ブラウザ用とキャッシュ用の2回必要。なので clone して
-                  // 2つの Stream があるようにする
-                  var responseToCache = response.clone();
-      
-                  caches.open(CACHE_NAME)
-                    .then(function(cache) {
-                        // cloneしなかった リクエストをCache用に使用する。
-                        // Cache用にCloneしたレスポンスをキャッシュする。
-                        cache.put(event.request, responseToCache);
-                    });
-      
-                    // キャッシュしなかった方のレスポンスはブラウザに渡す.
-                    return response;
-                }
+            return fetch(fetchRequest)
+                .then(
+                    function(response) {
+                        // レスポンスが正しいかをチェック
+                        if(!response || response.status !== 200 || response.type !== 'basic') {
+                            console.log('NG Response');
+                            return response;
+                        }
+        
+                        // 重要：レスポンスを clone する。レスポンスは Stream で
+                        // ブラウザ用とキャッシュ用の2回必要。なので clone して
+                        // 2つの Stream があるようにする
+                        var responseToCache = response.clone();
+        
+                        caches.open(CACHE_NAME)
+                            .then(function(cache) {
+                                // cloneしなかった リクエストをCache用に使用する。
+                                // Cache用にCloneしたレスポンスをキャッシュする。
+                                cache.put(event.request, responseToCache);
+                                return responseToCache;
+                            });
+        
+                        // キャッシュしなかった方のレスポンスはブラウザに渡す.
+                        return response;
+                    }
               );
           }
         )
