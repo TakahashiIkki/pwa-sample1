@@ -1,4 +1,4 @@
-var CACHE_NAME = 'my-okamoba-cache-v1';
+var CACHE_NAME = 'my-okamoba-cache-v2';
 var urlsToCache = [
     '/',
     '/index.html',
@@ -26,18 +26,16 @@ self.addEventListener('activate', function(event) {
     // Service Workerの更新
     console.log('[ServiceWorker] Activate');
 
-    var cacheWhitelist = ['pages-cache-v1', 'blog-posts-cache-v1'];
-
     event.waitUntil(
-        caches.keys().then(function(cacheNames) {
-        return Promise.all(
-            cacheNames.map(function(cacheName) {
-                // Service Worker内のキャッシュをループ: ホワイトリスト内に無いキャッシュは削除.
-                if (cacheWhitelist.indexOf(cacheName) === -1) {
-                    return caches.delete(cacheName);
+        caches.keys().then(keys => Promise.all(
+            // Service Worker内のキャッシュをループ: ホワイトリスト内に無いキャッシュは削除.
+            keys.map(key => {
+                if (key !== CACHE_NAME) {
+                    return caches.delete(key);
                 }
             })
-        );
+        )).then(() => {
+            self.clients.claim();
         })
     );
 });
