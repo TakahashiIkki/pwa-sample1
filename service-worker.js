@@ -1,11 +1,11 @@
 var CACHE_NAME = 'my-okamoba-cache-v2';
 var CACHE_URLS = [
-    '/',
-    '/index.html',
-    '/?from=hom',
-    '/icon.png',
-    '/icon512.png',
-    '/service-worker.js'
+    '/pwa-sample1/',
+    '/pwa-sample1/index.html',
+    '/pwa-sample1/?from=hom',
+    '/pwa-sample1/icon.png',
+    '/pwa-sample1/icon512.png',
+    '/pwa-sample1/service-worker.js'
 ];
 
 /** service worker.js の各イベント */
@@ -20,24 +20,6 @@ self.addEventListener('install', function(event) {
                 console.log('Opened cache');
                 return cache.addAll(CACHE_URLS).then(() => self.skipWaiting());
             })
-    );
-});
-
-self.addEventListener('activate', function(event) {
-    // Service Workerの更新
-    console.log('[ServiceWorker] Activate');
-
-    event.waitUntil(
-        caches.keys().then(keys => Promise.all(
-            // Service Worker内のキャッシュをループ: ホワイトリスト内に無いキャッシュは削除.
-            keys.map(key => {
-                if (key !== CACHE_NAME) {
-                    return caches.delete(key);
-                }
-            })
-        )).then(() => {
-            self.clients.claim();
-        })
     );
 });
 
